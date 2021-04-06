@@ -1,0 +1,25 @@
+class Test {
+    public static void main(String[] args) {
+        teste= new Exemplo();
+        System.out.println(true);
+    }
+}
+
+class Produto {
+
+    int[] quantidade;
+    boolean emEstoque;
+
+    public int setQuantidade(int novaQuantidade) {
+        while (novaQuantidade) {
+            System.out.println(adicionando_produto);
+        }
+        if (!emEstoque) {
+            emEstoque  = true;
+            quantidade = novaQuantidade;
+        } else {
+            quantidade = novaQuantidade;
+        }
+        return this;
+    }
+}
