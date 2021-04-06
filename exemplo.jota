@@ -1,7 +1,7 @@
 class Test {
     public static void main(String[] args) {
-        teste= new Exemplo();
-        System.out.println(true);
+        System.out.println(Hello_World);
+        teste = new Produto();
     }
 }
 

@@ -10,7 +10,6 @@ public class Jota implements JotaConstants {
     }
 
   static final public void Jota() throws ParseException {
-    Token t;
     Structure();
   }
 
@@ -32,7 +31,8 @@ public class Jota implements JotaConstants {
   }
 
   static final public void MainClass() throws ParseException {
-    jj_consume_token(CLASS);
+    Token t;
+    t = jj_consume_token(CLASS);
     Identifier();
     jj_consume_token(OBRACES);
     jj_consume_token(PUBLIC);
@@ -64,10 +64,12 @@ public class Jota implements JotaConstants {
     }
     jj_consume_token(CBRACES);
     jj_consume_token(CBRACES);
+               System.out.println("MainClass: " + t.image + " line: " + t.beginLine);
   }
 
   static final public void ClassDeclaration() throws ParseException {
-    jj_consume_token(CLASS);
+    Token t;
+    t = jj_consume_token(CLASS);
     Identifier();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case EXTENDS:
@@ -106,6 +108,7 @@ public class Jota implements JotaConstants {
       MethodDeclaration();
     }
     jj_consume_token(CBRACES);
+                                                                        System.out.println("ClassDeclaration: " + t.image + " line: " + t.beginLine);
   }
 
   static final public void VarDeclaration() throws ParseException {
@@ -115,7 +118,8 @@ public class Jota implements JotaConstants {
   }
 
   static final public void MethodDeclaration() throws ParseException {
-    jj_consume_token(PUBLIC);
+    Token t;
+    t = jj_consume_token(PUBLIC);
     Type();
     Identifier();
     jj_consume_token(OPARENTHESES);
@@ -168,16 +172,20 @@ public class Jota implements JotaConstants {
     Expression();
     jj_consume_token(SEMICOLON);
     jj_consume_token(CBRACES);
+               System.out.println("MethodDeclaration: " + t.image + " line: " + t.beginLine);
   }
 
   static final public void Type() throws ParseException {
+    Token t;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case INT:
-      jj_consume_token(INT);
+      t = jj_consume_token(INT);
       ArrayType();
+                           System.out.println("Type: " + t.image + " line: " + t.beginLine);
       break;
     case BOOLEAN:
-      jj_consume_token(BOOLEAN);
+      t = jj_consume_token(BOOLEAN);
+                     System.out.println("Type: " + t.image + " line: " + t.beginLine);
       break;
     case IDENTIFIER:
       Identifier();
@@ -190,6 +198,7 @@ public class Jota implements JotaConstants {
   }
 
   static final public void ArrayType() throws ParseException {
+     System.out.println("Array Type");
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case OBRACKET:
       jj_consume_token(OBRACKET);
@@ -205,7 +214,7 @@ public class Jota implements JotaConstants {
     Token t;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case OBRACES:
-      jj_consume_token(OBRACES);
+      t = jj_consume_token(OBRACES);
       label_8:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -223,45 +232,51 @@ public class Jota implements JotaConstants {
         Statement();
       }
       jj_consume_token(CBRACES);
+                                          System.out.println("Statement: " + t.image + " line: " + t.beginLine);
       break;
     case IF:
-      jj_consume_token(IF);
+      t = jj_consume_token(IF);
       jj_consume_token(OPARENTHESES);
       Expression();
       jj_consume_token(CPARENTHESES);
       Statement();
       jj_consume_token(ELSE);
       Statement();
+                                                                                       System.out.println("Statement: " + t.image + " line: " + t.beginLine);
       break;
     case WHILE:
-      jj_consume_token(WHILE);
+      t = jj_consume_token(WHILE);
       jj_consume_token(OPARENTHESES);
       Expression();
       jj_consume_token(CPARENTHESES);
       Statement();
+                                                                          System.out.println("Statement: " + t.image + " line: " + t.beginLine);
       break;
     case SYSOUT:
-      jj_consume_token(SYSOUT);
+      t = jj_consume_token(SYSOUT);
       jj_consume_token(OPARENTHESES);
       Expression();
       jj_consume_token(CPARENTHESES);
       jj_consume_token(SEMICOLON);
+                                                                          System.out.println("Statement: " + t.image + " line: " + t.beginLine);
       break;
     default:
       jj_la1[10] = jj_gen;
       if (jj_2_3(2)) {
         Identifier();
-        jj_consume_token(ASSIGNMENT);
+        t = jj_consume_token(ASSIGNMENT);
         Expression();
         jj_consume_token(SEMICOLON);
+                                                                           System.out.println("Statement: " + t.image + " line: " + t.beginLine);
       } else if (jj_2_4(2)) {
         Identifier();
-        jj_consume_token(OBRACKET);
+        t = jj_consume_token(OBRACKET);
         Expression();
         jj_consume_token(CBRACKET);
         jj_consume_token(ASSIGNMENT);
         Expression();
         jj_consume_token(SEMICOLON);
+                                                                                                              System.out.println("Statement: " + t.image + " line: " + t.beginLine);
       } else {
         jj_consume_token(-1);
         throw new ParseException();
@@ -270,45 +285,59 @@ public class Jota implements JotaConstants {
   }
 
   static final public void Expression() throws ParseException {
+    Token t;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case INTEGER_LITERAL:
-      jj_consume_token(INTEGER_LITERAL);
+      /* Expression() ( <AND> | <LESSTHAN> | <PLUS> | <MINUS> | <MULTIPLIED> ) Expression()
+          | Expression() <OBRACKET> Expression() <CBRACKET>
+          | Expression() <DOT> <LENGTH>
+          | Expression() <DOT> Identifier() <OPARENTHESES> ( Expression() ( <COMMA> Expression() )* )? <CPARENTHESES>
+          | */
+          t = jj_consume_token(INTEGER_LITERAL);
+                           System.out.println("Expression: " + t.image + " line: " + t.beginLine);
       break;
     case TRUE:
-      jj_consume_token(TRUE);
+      t = jj_consume_token(TRUE);
+                  System.out.println("Expression: " + t.image + " line: " + t.beginLine);
       break;
     case FALSE:
-      jj_consume_token(FALSE);
+      t = jj_consume_token(FALSE);
+                   System.out.println("Expression: " + t.image + " line: " + t.beginLine);
       break;
     case IDENTIFIER:
       Identifier();
       break;
     case THIS:
-      jj_consume_token(THIS);
+      t = jj_consume_token(THIS);
+                  System.out.println("Expression: " + t.image + " line: " + t.beginLine);
       break;
     default:
       jj_la1[11] = jj_gen;
       if (jj_2_5(2)) {
-        jj_consume_token(NEW);
+        t = jj_consume_token(NEW);
         jj_consume_token(INT);
         jj_consume_token(OBRACKET);
         Expression();
         jj_consume_token(CBRACKET);
+                                                                       System.out.println("Expression: " + t.image + " line: " + t.beginLine);
       } else if (jj_2_6(2)) {
-        jj_consume_token(NEW);
+        t = jj_consume_token(NEW);
         Identifier();
         jj_consume_token(OPARENTHESES);
         jj_consume_token(CPARENTHESES);
+                                                                         System.out.println("Expression: " + t.image + " line: " + t.beginLine);
       } else {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case DENIAL:
-          jj_consume_token(DENIAL);
+          t = jj_consume_token(DENIAL);
           Expression();
+                                 System.out.println("Expression: " + t.image + " line: " + t.beginLine);
           break;
         case OPARENTHESES:
-          jj_consume_token(OPARENTHESES);
+          t = jj_consume_token(OPARENTHESES);
           Expression();
           jj_consume_token(CPARENTHESES);
+                                                      System.out.println("Expression: " + t.image + " line: " + t.beginLine);
           break;
         default:
           jj_la1[12] = jj_gen;
@@ -320,7 +349,9 @@ public class Jota implements JotaConstants {
   }
 
   static final public void Identifier() throws ParseException {
-    jj_consume_token(IDENTIFIER);
+    Token t;
+    t = jj_consume_token(IDENTIFIER);
+                      System.out.println("Identifier: " + t.image + " line: " + t.beginLine);
   }
 
   static private boolean jj_2_1(int xla) {
@@ -365,31 +396,110 @@ public class Jota implements JotaConstants {
     finally { jj_save(5, xla); }
   }
 
+  static private boolean jj_3R_22() {
+    if (jj_scan_token(OBRACKET)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_21() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_22()) jj_scanpos = xsp;
+    return false;
+  }
+
+  static private boolean jj_3R_11() {
+    if (jj_scan_token(IDENTIFIER)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_19() {
+    if (jj_3R_11()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_18() {
+    if (jj_scan_token(BOOLEAN)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_12() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_17()) {
+    jj_scanpos = xsp;
+    if (jj_3R_18()) {
+    jj_scanpos = xsp;
+    if (jj_3R_19()) return true;
+    }
+    }
+    return false;
+  }
+
+  static private boolean jj_3R_17() {
+    if (jj_scan_token(INT)) return true;
+    if (jj_3R_21()) return true;
+    return false;
+  }
+
+  static private boolean jj_3_1() {
+    if (jj_3R_9()) return true;
+    return false;
+  }
+
+  static private boolean jj_3_6() {
+    if (jj_scan_token(NEW)) return true;
+    if (jj_3R_11()) return true;
+    return false;
+  }
+
+  static private boolean jj_3_5() {
+    if (jj_scan_token(NEW)) return true;
+    if (jj_scan_token(INT)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_20() {
+    if (jj_3R_10()) return true;
+    return false;
+  }
+
+  static private boolean jj_3_2() {
+    if (jj_3R_10()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_9() {
+    if (jj_3R_12()) return true;
+    if (jj_3R_11()) return true;
+    return false;
+  }
+
   static private boolean jj_3_4() {
-    if (jj_scan_token(41)) return true;
+    if (jj_3R_11()) return true;
     if (jj_scan_token(OBRACKET)) return true;
     return false;
   }
 
   static private boolean jj_3_3() {
-    if (jj_scan_token(41)) return true;
+    if (jj_3R_11()) return true;
     if (jj_scan_token(ASSIGNMENT)) return true;
     return false;
   }
 
-  static private boolean jj_3R_15() {
+  static private boolean jj_3R_16() {
     if (jj_scan_token(SYSOUT)) return true;
     if (jj_scan_token(OPARENTHESES)) return true;
     return false;
   }
 
-  static private boolean jj_3R_14() {
+  static private boolean jj_3R_15() {
     if (jj_scan_token(WHILE)) return true;
     if (jj_scan_token(OPARENTHESES)) return true;
     return false;
   }
 
-  static private boolean jj_3R_13() {
+  static private boolean jj_3R_14() {
     if (jj_scan_token(IF)) return true;
     if (jj_scan_token(OPARENTHESES)) return true;
     return false;
@@ -398,13 +508,13 @@ public class Jota implements JotaConstants {
   static private boolean jj_3R_10() {
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_3R_12()) {
-    jj_scanpos = xsp;
     if (jj_3R_13()) {
     jj_scanpos = xsp;
     if (jj_3R_14()) {
     jj_scanpos = xsp;
     if (jj_3R_15()) {
+    jj_scanpos = xsp;
+    if (jj_3R_16()) {
     jj_scanpos = xsp;
     if (jj_3_3()) {
     jj_scanpos = xsp;
@@ -417,78 +527,14 @@ public class Jota implements JotaConstants {
     return false;
   }
 
-  static private boolean jj_3R_12() {
+  static private boolean jj_3R_13() {
     if (jj_scan_token(OBRACES)) return true;
     Token xsp;
     while (true) {
       xsp = jj_scanpos;
-      if (jj_3R_17()) { jj_scanpos = xsp; break; }
+      if (jj_3R_20()) { jj_scanpos = xsp; break; }
     }
     if (jj_scan_token(CBRACES)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_19() {
-    if (jj_scan_token(OBRACKET)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_18() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_19()) jj_scanpos = xsp;
-    return false;
-  }
-
-  static private boolean jj_3R_11() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_16()) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(28)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(41)) return true;
-    }
-    }
-    return false;
-  }
-
-  static private boolean jj_3R_16() {
-    if (jj_scan_token(INT)) return true;
-    if (jj_3R_18()) return true;
-    return false;
-  }
-
-  static private boolean jj_3_1() {
-    if (jj_3R_9()) return true;
-    return false;
-  }
-
-  static private boolean jj_3_6() {
-    if (jj_scan_token(NEW)) return true;
-    if (jj_scan_token(41)) return true;
-    return false;
-  }
-
-  static private boolean jj_3_5() {
-    if (jj_scan_token(NEW)) return true;
-    if (jj_scan_token(INT)) return true;
-    return false;
-  }
-
-  static private boolean jj_3_2() {
-    if (jj_3R_10()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_9() {
-    if (jj_3R_11()) return true;
-    if (jj_scan_token(41)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_17() {
-    if (jj_3R_10()) return true;
     return false;
   }
 

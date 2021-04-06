@@ -9,6 +9,7 @@ public class Jota {
         Jota lex = new Jota(new FileInputStream(args[0]));
         lex.Jota();
     }
+
 }
 
 PARSER_END(Jota)
@@ -58,9 +59,7 @@ TOKEN : {
 }
 
 void Jota(): 
-{
-    Token t;
-}
+{}
 {
     Structure()
 }
@@ -72,20 +71,24 @@ void Structure():
 }
 
 void MainClass():
-{}
 {
-    <CLASS> Identifier() <OBRACES> 
+    Token t;
+}
+{
+    t = <CLASS> Identifier() <OBRACES> 
         <PUBLIC> <STATIC> <VOID> <MAIN> 
             <OPARENTHESES> <STRING> <OBRACKET> <CBRACKET> Identifier() <CPARENTHESES>
         <OBRACES>(Statement())*<CBRACES>
-    <CBRACES>
+    <CBRACES> {System.out.println("MainClass: " + t.image + " line: " + t.beginLine);}
 }
 
 void ClassDeclaration():
-{}
 {
-    <CLASS> Identifier() (<EXTENDS> Identifier())? 
-        <OBRACES> (VarDeclaration())* (MethodDeclaration())* <CBRACES>
+    Token t;
+}
+{
+    t = <CLASS> Identifier() (<EXTENDS> Identifier())? 
+        <OBRACES> (VarDeclaration())* (MethodDeclaration())* <CBRACES> {System.out.println("ClassDeclaration: " + t.image + " line: " + t.beginLine);}
 }
 
 void VarDeclaration():
@@ -95,26 +98,33 @@ void VarDeclaration():
 }
 
 void MethodDeclaration():
-{}
 {
-    <PUBLIC> Type() Identifier() 
+    Token t;
+}
+{
+    t = <PUBLIC> Type() Identifier() 
     <OPARENTHESES> 
         (Type() Identifier() (<COMMA> Type() Identifier())* )?
     <CPARENTHESES> 
     <OBRACES>
         (LOOKAHEAD(2) VarDeclaration())* (LOOKAHEAD(2) Statement())* <RETURN> Expression() <SEMICOLON>
-    <CBRACES>
+    <CBRACES> {System.out.println("MethodDeclaration: " + t.image + " line: " + t.beginLine);}
 }
 
 void Type():
-{} 
 {
-    <INT> ArrayType() | <BOOLEAN> | Identifier() 
+    Token t;
+} 
+{
+    t = <INT> ArrayType() {System.out.println("Type: " + t.image + " line: " + t.beginLine);}
+    | t = <BOOLEAN> {System.out.println("Type: " + t.image + " line: " + t.beginLine);}
+    | Identifier() 
 }
 
 void ArrayType():
 {}
 {
+    {System.out.println("Array Type");}
     (<OBRACKET> <CBRACKET>)? 
 }
 
@@ -123,37 +133,42 @@ void Statement():
     Token t;
 }
 {
-    <OBRACES>(Statement())*<CBRACES>
-    | <IF><OPARENTHESES>Expression()<CPARENTHESES> Statement() <ELSE> Statement()
-    | <WHILE> <OPARENTHESES> Expression() <CPARENTHESES> Statement()
-    | <SYSOUT> <OPARENTHESES> Expression() <CPARENTHESES> <SEMICOLON>
-    | LOOKAHEAD(2) Identifier() <ASSIGNMENT> Expression() <SEMICOLON>
-    | LOOKAHEAD(2) Identifier() <OBRACKET> Expression() <CBRACKET> <ASSIGNMENT> Expression() <SEMICOLON>
+    t = <OBRACES>(Statement())*<CBRACES> {System.out.println("Statement: " + t.image + " line: " + t.beginLine);}
+    | t = <IF><OPARENTHESES>Expression()<CPARENTHESES> Statement() <ELSE> Statement() {System.out.println("Statement: " + t.image + " line: " + t.beginLine);}
+    | t = <WHILE> <OPARENTHESES> Expression() <CPARENTHESES> Statement() {System.out.println("Statement: " + t.image + " line: " + t.beginLine);}
+    | t= <SYSOUT> <OPARENTHESES> Expression() <CPARENTHESES> <SEMICOLON> {System.out.println("Statement: " + t.image + " line: " + t.beginLine);}
+    | LOOKAHEAD(2) Identifier() t = <ASSIGNMENT> Expression() <SEMICOLON> {System.out.println("Statement: " + t.image + " line: " + t.beginLine);}
+    | LOOKAHEAD(2) Identifier() t = <OBRACKET> Expression() <CBRACKET> <ASSIGNMENT> Expression() <SEMICOLON> {System.out.println("Statement: " + t.image + " line: " + t.beginLine);}
 }
 
 void Expression():
-{}
+{
+    Token t;
+}
 {
     /* Expression() ( <AND> | <LESSTHAN> | <PLUS> | <MINUS> | <MULTIPLIED> ) Expression()
     | Expression() <OBRACKET> Expression() <CBRACKET>
     | Expression() <DOT> <LENGTH>
     | Expression() <DOT> Identifier() <OPARENTHESES> ( Expression() ( <COMMA> Expression() )* )? <CPARENTHESES>
-    | */ <INTEGER_LITERAL>
-    | <TRUE>
-    | <FALSE>
+    | */ 
+    t = <INTEGER_LITERAL> {System.out.println("Expression: " + t.image + " line: " + t.beginLine);}
+    | t = <TRUE> {System.out.println("Expression: " + t.image + " line: " + t.beginLine);}
+    | t = <FALSE> {System.out.println("Expression: " + t.image + " line: " + t.beginLine);}
     | Identifier()
-    | <THIS>
-    | LOOKAHEAD(2) <NEW> <INT> <OBRACKET> Expression() <CBRACKET>
-    | LOOKAHEAD(2) <NEW> Identifier() <OPARENTHESES> <CPARENTHESES>
-    | <DENIAL> Expression()
-    | <OPARENTHESES> Expression() <CPARENTHESES>
+    | t = <THIS> {System.out.println("Expression: " + t.image + " line: " + t.beginLine);}
+    | LOOKAHEAD(2) t = <NEW> <INT> <OBRACKET> Expression() <CBRACKET> {System.out.println("Expression: " + t.image + " line: " + t.beginLine);}
+    | LOOKAHEAD(2) t = <NEW> Identifier() <OPARENTHESES> <CPARENTHESES> {System.out.println("Expression: " + t.image + " line: " + t.beginLine);}
+    | t = <DENIAL> Expression() {System.out.println("Expression: " + t.image + " line: " + t.beginLine);}
+    | t = <OPARENTHESES> Expression() <CPARENTHESES> {System.out.println("Expression: " + t.image + " line: " + t.beginLine);}
 }
 
 
 void Identifier():
-{}
 {
-    <IDENTIFIER> 
+    Token t;
+}
+{
+    t = <IDENTIFIER> {System.out.println("Identifier: " + t.image + " line: " + t.beginLine);}
 }
 
 
